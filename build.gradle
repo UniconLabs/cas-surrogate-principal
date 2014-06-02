@@ -1,1 +1,26 @@
 apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    provided
+}
+
+dependencies {
+    provided "org.jasig.cas:cas-server-core:${project."cas.version"}"
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += configurations.provided
+    }
+}
