@@ -7,3 +7,4 @@ out
 *.ipr
 gradlew
 gradle2.bat
+classes
