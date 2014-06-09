@@ -38,7 +38,6 @@ idea {
     }
 }
 
-/*
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = "javadoc"
     from 'build/docs/javadoc'
@@ -56,6 +55,7 @@ artifacts {
 }
 
 signing {
+    required { gradle.taskGraph.hasTask("uploadArchives") }
     sign configurations.archives
 }
 
@@ -106,4 +106,3 @@ uploadArchives {
         }
     }
 }
- */
