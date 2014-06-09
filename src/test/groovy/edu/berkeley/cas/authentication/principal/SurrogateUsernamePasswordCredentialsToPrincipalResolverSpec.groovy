@@ -25,7 +25,7 @@ class SurrogateUsernamePasswordCredentialsToPrincipalResolverSpec extends Specif
         a.extractPrincipalId(b) == c
         where:
         a                                                                           | b                                                    | c
-        new SurrogateUsernamePasswordCredentialsToPrincipalResolver()               | new UsernamePasswordCredentials(username: "test+me") | "me"
-        new SurrogateUsernamePasswordCredentialsToPrincipalResolver(separator: '-') | new UsernamePasswordCredentials(username: "test-me") | "me"
+        new SurrogateUsernamePasswordCredentialsToPrincipalResolver()               | new UsernamePasswordCredentials(username: "test+me") | "test"
+        new SurrogateUsernamePasswordCredentialsToPrincipalResolver(separator: '-') | new UsernamePasswordCredentials(username: "test-me") | "test"
     }
 }

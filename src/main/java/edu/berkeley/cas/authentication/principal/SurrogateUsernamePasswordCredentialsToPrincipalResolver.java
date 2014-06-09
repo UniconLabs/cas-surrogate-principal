@@ -16,7 +16,7 @@ public class SurrogateUsernamePasswordCredentialsToPrincipalResolver extends Abs
     @Override
     protected String extractPrincipalId(Credentials credentials) {
         String passedUsername = ((UsernamePasswordCredentials) credentials).getUsername();
-        return passedUsername.substring(passedUsername.indexOf(this.separator) + 1);
+        return passedUsername.substring(0, passedUsername.indexOf(this.separator));
     }
 
     @Override
