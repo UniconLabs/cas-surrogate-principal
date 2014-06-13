@@ -1,18 +1,19 @@
 package edu.berkeley.cas.web.flow;
 
 import edu.berkeley.cas.authentication.service.SurrogateUsernamePasswordService;
-import org.springframework.webflow.execution.RequestContext;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import org.springframework.webflow.execution.RequestContext;
 
-import java.util.Map;
+import javax.validation.constraints.NotNull;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Class to support surrogate authentication selection in the CAS login web flow.
  */
 public class LoadSurrogateAction {
-    @javax.validation.constraints.NotNull
+    @NotNull
     private SurrogateUsernamePasswordService surrogateUsernamePasswordService;
 
     private String separator = "+";
