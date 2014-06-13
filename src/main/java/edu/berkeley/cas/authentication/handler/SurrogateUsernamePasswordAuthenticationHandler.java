@@ -6,6 +6,8 @@ import org.jasig.cas.authentication.handler.AuthenticationHandler;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
+import org.jasig.cas.authentication.handler.BadUsernameOrPasswordAuthenticationException;
+
 /**
  * Class to handle surrogate authentication
  */
@@ -31,12 +33,12 @@ public class SurrogateUsernamePasswordAuthenticationHandler implements Authentic
             if (handler.supports(usernamePasswordCredentials)
                     && handler.authenticate(usernamePasswordCredentials)
                     && this.surrogateUsernamePasswordService.canAuthenticateAs(targetUsername, surrogateUsername)) {
-                value = true;
-                break;
+
+                usernamePasswordCredentials.setUsername(passedUsername);
+                return true;
             }
         }
-        usernamePasswordCredentials.setUsername(passedUsername);
-        return value;
+        throw new BadUsernameOrPasswordAuthenticationException("Make sure to use `group+username`");
     }
 
     @Override
