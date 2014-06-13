@@ -8,3 +8,4 @@ out
 gradlew
 gradle2.bat
 classes
+/.nb-gradle/private/
