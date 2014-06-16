@@ -21,18 +21,6 @@ dependencies {
     ['core', 'support-ldap'].each {
         provided "org.jasig.cas:cas-server-${it}:${project."cas.version"}"
     }
-
-    provided "org.jasig.cas:cas-server-core:${project."cas.version"}"
-    
-    compile("org.springframework:spring-core:${project."spring.version"}") {
-        force = true
-    }
-     compile("org.springframework.ldap:spring-ldap-core:${project."spring.ldap.version"}") {
-        transitive = false
-    }
-    compile("org.springframework.ldap:spring-ldap-core-tiger:${project."spring.ldap.version"}") {
-        transitive = false
-    } 
     
     testCompile "org.codehaus.groovy:groovy-all:${project."groovy.version"}"
     testCompile "org.spockframework:spock-core:${project."spock.version"}"
