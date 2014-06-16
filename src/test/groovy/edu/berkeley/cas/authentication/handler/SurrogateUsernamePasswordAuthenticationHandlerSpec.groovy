@@ -2,6 +2,7 @@ package edu.berkeley.cas.authentication.handler
 
 import edu.berkeley.cas.authentication.service.SurrogateUsernamePasswordService
 import org.jasig.cas.authentication.handler.AuthenticationHandler
+import org.jasig.cas.authentication.handler.BadUsernameOrPasswordAuthenticationException
 import org.jasig.cas.authentication.principal.Credentials
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials
 import spock.lang.Shared
@@ -53,8 +54,15 @@ class SurrogateUsernamePasswordAuthenticationHandlerSpec extends Specification {
         expect:
         surrogateUsernamePasswordAuthenticationHandler.authenticate(a) == b
         where:
-        a                                                                       | b
-        new UsernamePasswordCredentials(username: "test+me", password: "me")    | true
-        new UsernamePasswordCredentials(username: "test+me", password: "wrong") | false
+        a                                                                    | b
+        new UsernamePasswordCredentials(username: "test+me", password: "me") | true
+    }
+
+    @Unroll
+    def "bad authentication"() {
+        when:
+        surrogateUsernamePasswordAuthenticationHandler.authenticate(new UsernamePasswordCredentials(username: "test+me", password: "wrong"))
+        then:
+        thrown BadUsernameOrPasswordAuthenticationException
     }
 }
