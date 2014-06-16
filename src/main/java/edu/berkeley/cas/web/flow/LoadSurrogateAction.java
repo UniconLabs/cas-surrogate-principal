@@ -24,6 +24,8 @@ public class LoadSurrogateAction {
      * @param context
      * @param credentials
      */
+    // Don't like this, but generics don't like me
+    @SuppressWarnings("unchecked")
     public void load(final RequestContext context, final Credentials credentials) {
         java.util.Map<String, Object> referenceData = (Map<String, Object>) context.getFlowScope().get("referenceData", java.util.Map.class);
         if (credentials instanceof UsernamePasswordCredentials) {
