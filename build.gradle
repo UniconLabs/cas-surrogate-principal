@@ -40,9 +40,11 @@ idea {
     }
 }
 
+javadoc {
+    classpath = configurations.compile + configurations.provided
+}
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classpath = configurations.compile + configurations.provided
     classifier = "javadoc"
     from 'build/docs/javadoc'
 }

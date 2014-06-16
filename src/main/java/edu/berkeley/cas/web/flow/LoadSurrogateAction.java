@@ -39,7 +39,7 @@ public class LoadSurrogateAction {
      * Check to see if surrogate list should be shown
      *
      * @param context
-     * @return
+     * @return String representation of boolean
      */
     public String doSurrogate(RequestContext context) {
         return context.getExternalContext().getRequestParameterMap().getBoolean("surrogate", false).toString();
