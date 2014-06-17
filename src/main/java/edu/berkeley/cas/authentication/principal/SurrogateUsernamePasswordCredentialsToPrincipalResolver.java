@@ -3,15 +3,17 @@ package edu.berkeley.cas.authentication.principal;
 import org.jasig.cas.authentication.principal.AbstractPersonDirectoryCredentialsToPrincipalResolver;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Class to resolve surrogate principals
  */
-public class SurrogateUsernamePasswordCredentialsToPrincipalResolver extends AbstractPersonDirectoryCredentialsToPrincipalResolver {
+class SurrogateUsernamePasswordCredentialsToPrincipalResolver extends AbstractPersonDirectoryCredentialsToPrincipalResolver {
     /**
      * The String that separates the parts of the username, eg "+" in "group+username"
      */
-    String separator = "+";
+    @Value("${surrogate.username.separator}")
+    private String separator = "+";
 
     @Override
     protected String extractPrincipalId(Credentials credentials) {

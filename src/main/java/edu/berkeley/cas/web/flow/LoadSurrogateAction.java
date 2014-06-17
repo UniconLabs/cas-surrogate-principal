@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Class to support surrogate authentication selection in the CAS login web flow.
  */
-public class LoadSurrogateAction {
+class LoadSurrogateAction {
     @NotNull
     private SurrogateUsernamePasswordService surrogateUsernamePasswordService;
 
@@ -21,8 +21,8 @@ public class LoadSurrogateAction {
     /**
      * load a map containing eligible accounts for this surrogate
      *
-     * @param context
-     * @param credentials
+     * @param context The current webflow request context
+     * @param credentials The current credentials
      */
     // Don't like this, but generics don't like me
     @SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class LoadSurrogateAction {
     /**
      * Check to see if surrogate list should be shown
      *
-     * @param context
+     * @param context The current webflow request context
      * @return String representation of boolean
      */
     public String doSurrogate(RequestContext context) {
@@ -55,7 +55,6 @@ public class LoadSurrogateAction {
                 upc.setUsername(target + separator + upc.getUsername());
             }
         }
-        return;
     }
 
     public void setSurrogateUsernamePasswordService(SurrogateUsernamePasswordService surrogateUsernamePasswordService) {
