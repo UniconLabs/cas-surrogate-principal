@@ -1,5 +1,6 @@
 package edu.berkeley.cas.authentication.handler
 
+import edu.berkeley.cas.authentication.principal.SurrogateUsernamePasswordCredentials
 import edu.berkeley.cas.authentication.service.SurrogateUsernamePasswordService
 import org.jasig.cas.authentication.handler.AuthenticationHandler
 import org.jasig.cas.authentication.handler.BadUsernameOrPasswordAuthenticationException
@@ -32,21 +33,10 @@ class SurrogateUsernamePasswordAuthenticationHandlerSpec extends Specification {
         expect:
         surrogateUsernamePasswordAuthenticationHandler.supports(a) == b
         where:
-        a                                                                    | b
-        [] as Credentials                                                    | false
-        new UsernamePasswordCredentials(username: "test", password: "test")  | false
-        new UsernamePasswordCredentials(username: "test+me", password: "me") | true
-    }
-
-    @Unroll
-    def "test different separators"() {
-        expect:
-        a.supports(b) == c
-        where:
-        a                                                                  | b                                                    | c
-        new SurrogateUsernamePasswordAuthenticationHandler()               | new UsernamePasswordCredentials(username: "test+me") | true
-        new SurrogateUsernamePasswordAuthenticationHandler(separator: "-") | new UsernamePasswordCredentials(username: "test+me") | false
-        new SurrogateUsernamePasswordAuthenticationHandler(separator: "-") | new UsernamePasswordCredentials(username: "test-me") | true
+        a                                                                                                      | b
+        [] as Credentials                                                                                      | false
+        new UsernamePasswordCredentials(username: "test", password: "test")                                    | false
+        new SurrogateUsernamePasswordCredentials(username: "test", targetUsername: "target", password: "test") | true
     }
 
     @Unroll
@@ -55,13 +45,13 @@ class SurrogateUsernamePasswordAuthenticationHandlerSpec extends Specification {
         surrogateUsernamePasswordAuthenticationHandler.authenticate(a) == b
         where:
         a                                                                    | b
-        new UsernamePasswordCredentials(username: "test+me", password: "me") | true
+        new SurrogateUsernamePasswordCredentials(username: "me", targetUsername: "test", password: "me") | true
     }
 
     @Unroll
     def "bad authentication"() {
         when:
-        surrogateUsernamePasswordAuthenticationHandler.authenticate(new UsernamePasswordCredentials(username: "test+me", password: "wrong"))
+        surrogateUsernamePasswordAuthenticationHandler.authenticate(new SurrogateUsernamePasswordCredentials(username: "me", targetUsername: "test", password: "wrong"))
         then:
         thrown BadUsernameOrPasswordAuthenticationException
     }

@@ -1,7 +1,9 @@
 package edu.berkeley.cas.web.flow;
 
+import edu.berkeley.cas.authentication.principal.SurrogateUsernamePasswordCredentials;
 import edu.berkeley.cas.authentication.service.SurrogateUsernamePasswordService;
 import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.authentication.principal.RememberMeCredentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.springframework.webflow.execution.RequestContext;
 
@@ -16,6 +18,9 @@ class LoadSurrogateAction {
     @NotNull
     private SurrogateUsernamePasswordService surrogateUsernamePasswordService;
 
+    /**
+     * String that separates a target and username in a combined form
+     */
     private String separator = "+";
 
     /**
@@ -55,6 +60,30 @@ class LoadSurrogateAction {
                 upc.setUsername(target + separator + upc.getUsername());
             }
         }
+    }
+
+    /**
+     * Converts a UsernamePasswordCredentials to a SurrogateUsernamePasswordCredentials if eligible
+     * @param usernamePasswordCredentials Credentials to check and base new credentials upon
+     * @return a new SurrogateUsernamePasswordCredential if eligible, otherwise the passed UsernamePasswordCredentials
+     */
+    public UsernamePasswordCredentials convertSurrogateCredentials(UsernamePasswordCredentials usernamePasswordCredentials) {
+        if (!(usernamePasswordCredentials instanceof SurrogateUsernamePasswordCredentials) && usernamePasswordCredentials.getUsername().contains(this.separator)) {
+            SurrogateUsernamePasswordCredentials surrogateUsernamePasswordCredentials = new SurrogateUsernamePasswordCredentials();
+
+            String tUsername = usernamePasswordCredentials.getUsername();
+            String targetUsername = tUsername.substring(0, tUsername.indexOf(this.separator));
+            String username = tUsername.substring(tUsername.indexOf(this.separator) + 1);
+            surrogateUsernamePasswordCredentials.setUsername(username);
+            surrogateUsernamePasswordCredentials.setTargetUsername(targetUsername);
+            if (usernamePasswordCredentials instanceof RememberMeCredentials) {
+                surrogateUsernamePasswordCredentials.setRememberMe(((RememberMeCredentials)usernamePasswordCredentials).isRememberMe());
+            }
+            surrogateUsernamePasswordCredentials.setPassword(usernamePasswordCredentials.getPassword());
+
+            return surrogateUsernamePasswordCredentials;
+        }
+        return usernamePasswordCredentials;
     }
 
     public void setSurrogateUsernamePasswordService(SurrogateUsernamePasswordService surrogateUsernamePasswordService) {

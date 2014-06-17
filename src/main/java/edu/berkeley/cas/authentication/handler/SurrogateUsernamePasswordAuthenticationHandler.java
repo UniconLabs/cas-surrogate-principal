@@ -1,5 +1,6 @@
 package edu.berkeley.cas.authentication.handler;
 
+import edu.berkeley.cas.authentication.principal.SurrogateUsernamePasswordCredentials;
 import edu.berkeley.cas.authentication.service.SurrogateUsernamePasswordService;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.AuthenticationHandler;
@@ -15,26 +16,18 @@ public class SurrogateUsernamePasswordAuthenticationHandler implements Authentic
     java.util.List<org.jasig.cas.authentication.handler.AuthenticationHandler> authenticationHandlerList;
     SurrogateUsernamePasswordService surrogateUsernamePasswordService;
 
-    /**
-     * The String that separates the parts of the username, eg "+" in "group+username"
-     */
-    String separator = "+";
-
     @Override
     public boolean authenticate(Credentials credentials) throws AuthenticationException {
-        // TODO: this is not safe! we should explore making credentials cloneable!
-        UsernamePasswordCredentials usernamePasswordCredentials = (UsernamePasswordCredentials) credentials;
-        boolean value = false;
-        String passedUsername = usernamePasswordCredentials.getUsername();
-        String surrogateUsername = passedUsername.substring(passedUsername.indexOf(separator) + 1);
-        String targetUsername = passedUsername.substring(0, passedUsername.indexOf(separator));
-        usernamePasswordCredentials.setUsername(surrogateUsername);
-        for (AuthenticationHandler handler : this.authenticationHandlerList) {
+        SurrogateUsernamePasswordCredentials surrogateUsernamePasswordCredentials = (SurrogateUsernamePasswordCredentials) credentials;
+
+        UsernamePasswordCredentials usernamePasswordCredentials = new UsernamePasswordCredentials();
+        usernamePasswordCredentials.setUsername(surrogateUsernamePasswordCredentials.getUsername());
+        usernamePasswordCredentials.setPassword(surrogateUsernamePasswordCredentials.getPassword());
+
+        for (AuthenticationHandler handler: this.authenticationHandlerList) {
             if (handler.supports(usernamePasswordCredentials)
                     && handler.authenticate(usernamePasswordCredentials)
-                    && this.surrogateUsernamePasswordService.canAuthenticateAs(targetUsername, surrogateUsername)) {
-
-                usernamePasswordCredentials.setUsername(passedUsername);
+                    && this.surrogateUsernamePasswordService.canAuthenticateAs(surrogateUsernamePasswordCredentials.getTargetUsername(), surrogateUsernamePasswordCredentials.getUsername())) {
                 return true;
             }
         }
@@ -43,9 +36,7 @@ public class SurrogateUsernamePasswordAuthenticationHandler implements Authentic
 
     @Override
     public boolean supports(Credentials credentials) {
-        return credentials != null
-                && UsernamePasswordCredentials.class.isAssignableFrom(credentials.getClass())
-                && ((UsernamePasswordCredentials) credentials).getUsername().contains(separator);
+        return credentials != null && SurrogateUsernamePasswordCredentials.class.isAssignableFrom(credentials.getClass());
     }
 
     public void setAuthenticationHandlerList(java.util.List<AuthenticationHandler> authenticationHandlerList) {
@@ -54,9 +45,5 @@ public class SurrogateUsernamePasswordAuthenticationHandler implements Authentic
 
     public void setSurrogateUsernamePasswordService(SurrogateUsernamePasswordService surrogateUsernamePasswordService) {
         this.surrogateUsernamePasswordService = surrogateUsernamePasswordService;
-    }
-
-    void setSeparator(String separator) {
-        this.separator = separator;
     }
 }
