@@ -1,6 +1,5 @@
 package edu.berkeley.cas.authentication.principal
 
-import edu.berkeley.cas.authentication.handler.SurrogateUsernamePasswordAuthenticationHandler
 import org.jasig.cas.authentication.principal.Credentials
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials
 import spock.lang.Specification
@@ -12,11 +11,10 @@ class SurrogateUsernamePasswordCredentialsToPrincipalResolverSpec extends Specif
         expect:
         a.supports(b) == c
         where:
-        a                                                                           | b                                                    | c
-        new SurrogateUsernamePasswordCredentialsToPrincipalResolver()               | [:] as Credentials                                   | false
-        new SurrogateUsernamePasswordCredentialsToPrincipalResolver()               | new UsernamePasswordCredentials(username: "test")    | false
-        new SurrogateUsernamePasswordCredentialsToPrincipalResolver()               | new UsernamePasswordCredentials(username: "test+me") | true
-        new SurrogateUsernamePasswordCredentialsToPrincipalResolver(separator: '-') | new UsernamePasswordCredentials(username: "test-me") | true
+        a                                                             | b                                                                                    | c
+        new SurrogateUsernamePasswordCredentialsToPrincipalResolver() | [:] as Credentials                                                                   | false
+        new SurrogateUsernamePasswordCredentialsToPrincipalResolver() | new UsernamePasswordCredentials(username: "test")                                    | false
+        new SurrogateUsernamePasswordCredentialsToPrincipalResolver() | new SurrogateUsernamePasswordCredentials(username: "test", targetUsername: "target") | true
     }
 
     @Unroll
@@ -24,8 +22,7 @@ class SurrogateUsernamePasswordCredentialsToPrincipalResolverSpec extends Specif
         expect:
         a.extractPrincipalId(b) == c
         where:
-        a                                                                           | b                                                    | c
-        new SurrogateUsernamePasswordCredentialsToPrincipalResolver()               | new UsernamePasswordCredentials(username: "test+me") | "test"
-        new SurrogateUsernamePasswordCredentialsToPrincipalResolver(separator: '-') | new UsernamePasswordCredentials(username: "test-me") | "test"
+        a                                                             | b                                                                                    | c
+        new SurrogateUsernamePasswordCredentialsToPrincipalResolver() | new SurrogateUsernamePasswordCredentials(username: "test", targetUsername: "target") | "target"
     }
 }

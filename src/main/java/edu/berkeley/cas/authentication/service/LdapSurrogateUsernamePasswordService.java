@@ -11,7 +11,6 @@ import org.springframework.ldap.core.support.AbstractContextMapper;
 
 import javax.annotation.PostConstruct;
 import javax.naming.directory.SearchControls;
-import javax.naming.ldap.LdapName;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
@@ -147,6 +146,7 @@ public class LdapSurrogateUsernamePasswordService implements SurrogateUsernamePa
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     private Collection<String> getAllUsers(String userDn) {
         HashSet<String> users = new HashSet<String>();
 
@@ -170,6 +170,7 @@ public class LdapSurrogateUsernamePasswordService implements SurrogateUsernamePa
         return users;
     }
 
+    @SuppressWarnings("unchecked")
     private Collection<String> getCorrectUsers(Collection<String> allUsers) {
         HashSet<String> usernames = new HashSet<String>();
 
@@ -221,5 +222,9 @@ public class LdapSurrogateUsernamePasswordService implements SurrogateUsernamePa
 
     public void setUsernameAttribute(String usernameAttribute) {
         this.usernameAttribute = usernameAttribute;
+    }
+
+    public void setMemberAttribute(String memberAttribute) {
+        this.memberAttribute = memberAttribute;
     }
 }

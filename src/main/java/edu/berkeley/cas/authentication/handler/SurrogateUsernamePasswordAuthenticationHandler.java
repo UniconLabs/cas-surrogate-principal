@@ -12,9 +12,9 @@ import org.jasig.cas.authentication.handler.BadUsernameOrPasswordAuthenticationE
 /**
  * Class to handle surrogate authentication
  */
-public class SurrogateUsernamePasswordAuthenticationHandler implements AuthenticationHandler {
-    java.util.List<org.jasig.cas.authentication.handler.AuthenticationHandler> authenticationHandlerList;
-    SurrogateUsernamePasswordService surrogateUsernamePasswordService;
+class SurrogateUsernamePasswordAuthenticationHandler implements AuthenticationHandler {
+    private java.util.List<org.jasig.cas.authentication.handler.AuthenticationHandler> authenticationHandlerList;
+    private SurrogateUsernamePasswordService surrogateUsernamePasswordService;
 
     @Override
     public boolean authenticate(Credentials credentials) throws AuthenticationException {
