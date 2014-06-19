@@ -151,7 +151,7 @@ public class LdapSurrogateUsernamePasswordService implements SurrogateUsernamePa
         HashSet<String> users = new HashSet<String>();
 
         String filter = userGroupFilter.replaceAll("%d", userDn);
-        List results = ldapTemplate.search(baseDN, filter, SearchControls.SUBTREE_SCOPE, new String[]{"member"}, new ContextMapper() {
+        List results = ldapTemplate.search(baseDN, filter, SearchControls.SUBTREE_SCOPE, new String[]{memberAttribute}, new ContextMapper() {
             @Override
             public Object mapFromContext(Object ctx) {
                 if (ctx instanceof DirContextOperations) {
