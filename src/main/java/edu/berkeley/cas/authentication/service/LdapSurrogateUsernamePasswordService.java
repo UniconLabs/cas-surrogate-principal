@@ -92,6 +92,9 @@ public class LdapSurrogateUsernamePasswordService implements SurrogateUsernamePa
 
     @Override
     public boolean canAuthenticateAs(String username, String surrogate) {
+        if (surrogate.equals(username)) {
+            return true;
+        }
         // get the dn of the surrogate user
         String filter = StringUtils.replace(surrogateUserSearchFilter, "%u", surrogate);
         List surrogateUser = ldapTemplate.search("", filter, dnMapper);
@@ -126,12 +129,15 @@ public class LdapSurrogateUsernamePasswordService implements SurrogateUsernamePa
 
         // get the DN of the surrogate, get all the users in the same groups as the surrogate, then get a list of
         // usernames for those users that are eligible surrogate targets
-        Collection<String> correctUsers = getCorrectUsers(getAllUsers(getUserDn(surrogate)));
-        if (correctUsers != null) {
-            // sort the list of username
-            List<String> nCorrectUsers = new ArrayList<String>(correctUsers);
-            Collections.sort(nCorrectUsers);
-            accounts.addAll(nCorrectUsers);
+        String userDn = getUserDn(surrogate);
+        if (userDn != null && !userDn.equals("")) {
+            Collection<String> correctUsers = getCorrectUsers(getAllUsers(userDn));
+            if (correctUsers != null) {
+                // sort the list of username
+                List<String> nCorrectUsers = new ArrayList<String>(correctUsers);
+                Collections.sort(nCorrectUsers);
+                accounts.addAll(nCorrectUsers);
+            }
         }
 
         return accounts;
