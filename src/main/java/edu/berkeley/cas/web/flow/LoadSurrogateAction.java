@@ -86,6 +86,22 @@ class LoadSurrogateAction {
         return usernamePasswordCredentials;
     }
 
+    /**
+     * Converts a SurrogateUsernamePasswordCredentials to a UsernamePasswordCredentials if eligible
+     *
+     * @param usernamePasswordCredentials Credentials to check and base a new UsernamePasswordCredentials upon
+     * @return a new UsernamePasswordCredentials if the original was a SurrogateUsernamePasswordCredentials, otherwise the passed UsernamePasswordCredentials
+     */
+    public UsernamePasswordCredentials demoteSurrogateCredentials(UsernamePasswordCredentials usernamePasswordCredentials) {
+        if (usernamePasswordCredentials instanceof SurrogateUsernamePasswordCredentials) {
+            UsernamePasswordCredentials nUsernamePasswordCredentials = new UsernamePasswordCredentials();
+            nUsernamePasswordCredentials.setUsername(usernamePasswordCredentials.getUsername());
+            nUsernamePasswordCredentials.setPassword(usernamePasswordCredentials.getPassword());
+            return nUsernamePasswordCredentials;
+        }
+        return usernamePasswordCredentials;
+    }
+
     public void setSurrogateUsernamePasswordService(SurrogateUsernamePasswordService surrogateUsernamePasswordService) {
         this.surrogateUsernamePasswordService = surrogateUsernamePasswordService;
     }
