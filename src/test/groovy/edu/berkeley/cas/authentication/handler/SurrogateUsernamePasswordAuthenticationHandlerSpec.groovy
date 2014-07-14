@@ -53,6 +53,6 @@ class SurrogateUsernamePasswordAuthenticationHandlerSpec extends Specification {
         when:
         surrogateUsernamePasswordAuthenticationHandler.authenticate(new SurrogateUsernamePasswordCredentials(username: "me", targetUsername: "test", password: "wrong"))
         then:
-        thrown BadUsernameOrPasswordAuthenticationException
+        thrown BadSurrogateAuthenticationException
     }
 }
