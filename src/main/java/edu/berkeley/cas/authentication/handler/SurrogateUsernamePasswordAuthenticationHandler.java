@@ -31,7 +31,7 @@ class SurrogateUsernamePasswordAuthenticationHandler implements AuthenticationHa
                 return true;
             }
         }
-        throw new BadUsernameOrPasswordAuthenticationException("Make sure to use `group+username`");
+        throw new BadSurrogateAuthenticationException();
     }
 
     @Override
